@@ -55,17 +55,16 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Test User login by password is not encrypted
+     * Test User register by name input is FullwidthKatakana characters
      */
-    public function testsfEmployeesRegister_PasswordIsNotEncrypted()
+    public function testsfEmployeesRegister_NameInputIsFullwidthKatakanaChars()
     {
         // Give the context
-        $this->expected = false;
+        $this->expected = true;
     
         // When the cause (trigger)
-        $username = 'hieu';
-        $password = 'hieu';
-        $this->actual = $this->employee->login($username, $password);
+        $name = 'テュアン';
+        $this->actual = $this->employee->checkInputIsFullwidthKatakanaChars($name);
     
         // Then the effect (assertion)
         $this->assertEquals($this->expected, $this->actual);

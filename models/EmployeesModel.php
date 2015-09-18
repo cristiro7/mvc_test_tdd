@@ -28,6 +28,24 @@ class EmployeesModel extends \Model
     private $net_salary;
     
     /**
+     * check name input is full width Katakana characters.
+     *
+     * @return false if check is not match
+     * @return true if check is match
+     */
+    public function checkInputIsFullwidthKatakanaChars($name)
+    {
+        // Contains all full width katakana characters
+        $pattern = "/^([゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ]+)$/u";
+
+        if(preg_match($pattern, $name)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
      * Login process.
      * 
      * @return false if select empty
