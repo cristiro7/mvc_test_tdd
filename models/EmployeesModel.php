@@ -54,7 +54,7 @@ class EmployeesModel extends \Model
             array_push($result['errors'], "Users name is required!");
         }else{
             $result['result'] = $this->checkInputIsFullwidthKatakanaChars($username);
-            array_push($result['errors'], "User name input is not Fullwidth Katakana");
+            array_push($result['errors'], "User name input must be Fullwidth Katakana");
         }
         
         // User not enter password
@@ -125,6 +125,19 @@ class EmployeesModel extends \Model
         }else{
             return false;
         }
+    }
+    
+    /**
+     * function check phone input format
+     * @return boolean
+     */
+    
+    function checkPhoneInputFormat($phone){
+        //check phone length
+        if(strlen($phone) > 12)
+            return false;
+        // check phone format
+        return preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', trim($phone));
     }
     
     /**

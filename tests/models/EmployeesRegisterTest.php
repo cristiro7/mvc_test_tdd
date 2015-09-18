@@ -17,8 +17,8 @@ require_once($HOME . "/models/EmployeesModel.php");
  * ThuanNguyen             2015.22.01               created
  *
  * To do List
- * 1) Test Input 
- *   + Input is FullwidthKatakana characters
+ * I. Test Input Name.
+ * 1) Input is FullwidthKatakana characters
  * 2) Kanji Lvl1
  *   +
  * 3) Kanji Lvl2
@@ -35,6 +35,17 @@ require_once($HOME . "/models/EmployeesModel.php");
  * 7) Input contain hiragana
  * 8) Input contain Alpha 1 byte
  * 9) Contain Prohibited Character
+ * 
+ * II. Test Input phone.
+ * - Should return false when input phone contain character alpha (090-999-454a)
+ * - Should return false when input phone have first character is "-" (-09-999-4542)
+ * - Should return false when input phone is incorrect format  (090-9993-4544)
+ * - Should return false when input phone is incorrect format  (0906-999-4544)
+ * - Should return false when input phone is incorrect format  (090-999-45444)
+ * - Should return false when input phone contain symbol (090@-999-4543)
+ * - Should return false when input phone contain point (090-999-454.)
+ * 
+ * - Should return true when input phone is correct format (090-911-1991)
  * 
  */
 
