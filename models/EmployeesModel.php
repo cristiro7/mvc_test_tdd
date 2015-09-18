@@ -36,16 +36,77 @@ class EmployeesModel extends \Model
      */
     
     public static function checkValid($postDatas){
+        // Array save errors when validate.
+        $result = array(
+            'result' => true,
+            'errors' => array()
+        );
+        $check = true;
         
-        return true;
+        // Get value user input
+        $username = isset($postDatas['username']) ? trim($postDatas['username']) : NULL;
+        $password = isset($postDatas['password']) ? trim($postDatas['password']) : NULL;
+        
+        // User not enter username
+        if (empty($username))
+        {
+            $result['result'] = false;
+            array_push($result['errors'], "Users name is required!");
+        }else{
+            $result['result'] = $this->checkInputIsFullwidthKatakanaChars($username);
+            array_push($result['errors'], "User name input is not Fullwidth Katakana");
+        }
+        
+        // User not enter password
+        if (empty($password))
+        {
+            $result['result'] = false;
+            array_push($result['errors'], "Password is required!");
+        }
+        
+        return $result;
     }
     
     function setData($postDatas){
+        foreach($postDatas as $field => $value){
+            if(isset($this->$field)){
+                $this->$field = $value;
+            }
+        }
         return true;
     }
     
     function register(){
-        return true;
+        try
+        {
+            // Password encrypt by SHA-2
+            $password = hash('SHA256',$this->password);
+            // Call login() method in the EmployeesModel, put the result in $employee (false or user data)
+            $result = $employee->login($username,$password);
+        
+            // Check result returned
+            if($result)
+            {
+                // Login success, write the user data into session
+                Session::init();
+                Session::set('user_logged_in', true);
+                Session::set('user_id', $result['id']);
+                Session::set('firstname', $result['firstname']);
+                Session::set('lastname', $result['lastname']);
+                Session::set('fullname', $result['firstname']." ".$result['lastname']);
+                Session::set('employeetype_id', $result['employeetype_id']);
+        
+                // Redirect user to page list all Employees
+                header('location: ' . BASE_PATH . 'employees/listemployees');
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->setView('login');
+            $this->view->set('title', 'There was an error login the data!');
+            $this->view->set('formData', $_POST);
+            $this->view->set('saveError', $e->getMessage());
+        }
     }
     
     /**
