@@ -23,6 +23,14 @@ require_once($HOME . "/models/EmployeesModel.php");
  *   +
  * 3) Kanji Lvl2
  *   +
+ *   
+ * Test cases for KhanhVu:
+ * 4/ Kanji Lv3
+ * 
+ * 5/ Kanji Lv4
+ * 
+ * 6/ Contain Kanji.
+ * 
  */
 
 class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
