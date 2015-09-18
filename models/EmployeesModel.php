@@ -14,19 +14,26 @@ class EmployeesModel extends \Model
     private $firstname;
     private $lastname;
     private $isaccountant;
-    
+
     // Extend tbl_user
     private $name;
     private $phone;
     private $email;
     private $address;
-    
+
     // Using tbl_weeklysalary
     private $user_id;
     private $comment;
     private $gross_salary;
     private $net_salary;
-    
+
+    /**
+     * Gets Set methods
+     * @author khoa.td
+     */
+    public function setName($name){ $this->name = $name;}
+    public function getName(){return $this->name;}
+
     /**
      * feature Register
      * List functions:
@@ -34,7 +41,6 @@ class EmployeesModel extends \Model
      * - setData(); set data submit 
      * - register(); process register
      */
-    
     public static function checkValid($postDatas){
         // Array save errors when validate.
         $result = array(
@@ -73,7 +79,7 @@ class EmployeesModel extends \Model
         
         return $result;
     }
-    
+
     function setData($postDatas){
         foreach($postDatas as $field => $value){
             if(isset($this->$field)){
@@ -82,7 +88,7 @@ class EmployeesModel extends \Model
         }
         return true;
     }
-    
+
     function register(){
         try
         {
@@ -115,7 +121,7 @@ class EmployeesModel extends \Model
             $this->view->set('saveError', $e->getMessage());
         }
     }
-    
+
     /**
      * check name input is full width Katakana characters.
      *
@@ -401,22 +407,7 @@ class EmployeesModel extends \Model
 	    }
 	}
 	
-	public function setName($name){ $this->name = $name;}
-	public function getName(){return $this->name;}
 	
-	/**
-	 * @author khoa.td
-	 * Test input Prohibited Character to username
-	 */
-	public function testInputProhibitedCharacter(){
-	    // Give the context
-	    $this->expected = true;
-	    // When inputed is Hiragana
-	    $this->employee->setName("ｸ");
-	    $this->actual = $this->employee->checkNameContainProhibitedCharacter();
-	    // Then function checkNameIsHiragana return true
-	    $this->assertEquals($this->expected, $this->actual);
-	}
 	
 	
 	public function checkNameContainAlpha1Byte(){

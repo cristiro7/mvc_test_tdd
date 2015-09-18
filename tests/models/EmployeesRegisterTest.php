@@ -20,18 +20,12 @@ require_once($HOME . "/models/EmployeesModel.php");
  * I. Test Input Name.
  * 1) Input is FullwidthKatakana characters
  * 2) Kanji Lvl1
- *   +
  * 3) Kanji Lvl2
- *   +
- *   
  * Test cases for KhanhVu:
- * 4/ Kanji Lv3
- * 
+ * 4/ Kanji Lv3 
  * 5/ Kanji Lv4
- * 
  * 6/ Contain Kanji
- * 
- * * Test cases for khoa.td
+ * Test cases for khoa.td
  * 7) Input contain hiragana
  * 8) Input contain Alpha 1 byte
  * 9) Contain Prohibited Character
@@ -44,9 +38,7 @@ require_once($HOME . "/models/EmployeesModel.php");
  * - Should return false when input phone is incorrect format  (090-999-45444)
  * - Should return false when input phone contain symbol (090@-999-4543)
  * - Should return false when input phone contain point (090-999-454.)
- * 
  * - Should return true when input phone is correct format (090-911-1991)
- * 
  */
 
 class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
@@ -57,28 +49,13 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     protected function setUp() {
         $this->employee = new EmployeesModel();
     }
-    
     /**
      * This function used to erase data which we have created inside setUp function.
      */
     protected function tearDown() {
     
     }
-    
-    /**
-     * @author khoa.td
-     * Test input Hiragana to username
-     */
-    public function testInputHiragana(){
-        // Give the context
-        $this->expected = true;
-        // When inputed is Hiragana
-        $this->employee->setName("ゞほ");
-        $this->actual = $this->employee->checkNameIsHiragana();
-        // Then function checkNameIsHiragana return true
-        $this->assertEquals($this->expected, $this->actual);
-    }
-    
+
     /**
      * Test User register by name input is FullwidthKatakana characters
      */
@@ -86,42 +63,13 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     {
         // Give the context
         $this->expected = true;
-    
         // When the cause (trigger)
         $name = 'テュアン';
         $this->actual = $this->employee->checkInputIsFullwidthKatakanaChars($name);
-    
         // Then the effect (assertion)
         $this->assertEquals($this->expected, $this->actual);
     }
-    /**
-     * @author:Khanh
-     * Test Input Kanji Lv3 -- Should return false
-     */
-    
-    function testShouldReturnFalseWhenInputKanjiLv3(){
-        // Given
-        $input = '篗';
-        // When
-        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
-        // Then
-        $this->assertFalse($rerult);
-    }
-    
-    /**
-     * @author:Khanh
-     * Test Input Kanji Lv4 -- Should return false
-     */
-    
-    function testShouldReturnFalseWhenInputKanjiLv4(){
-        // Given
-        $input = '㥯';
-        // When
-        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
-        // Then
-        $this->assertFalse($rerult);
-    }
-    
+
     /**
      * @author:Khanh
      * Test Input String contain Kanji -- Should return false
@@ -135,12 +83,81 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
         // Then
         $this->assertFalse($rerult);
     }
+
+    /**
+     * @author:Khanh
+     * Test Input Kanji Lv3 -- Should return false
+     */
     
+    function testShouldReturnFalseWhenInputKanjiLv3(){
+        // Given
+        $input = '篗';
+        // When
+        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
+        // Then
+        $this->assertFalse($rerult);
+    }
+
+    /**
+     * @author:Khanh
+     * Test Input Kanji Lv4 -- Should return false
+     */
+    
+    function testShouldReturnFalseWhenInputKanjiLv4(){
+        // Given
+        $input = '㥯';
+        // When
+        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
+        // Then
+        $this->assertFalse($rerult);
+    }
+
+    /**
+     * @author khoa.td
+     * Test input Hiragana to username
+     */
+    public function testInputHiragana(){
+        // Give the context
+        $this->expected = true;
+        // When inputed is Hiragana
+        $this->employee->setName("ゞほ");
+        $this->actual = $this->employee->checkNameIsHiragana();
+        // Then function checkNameIsHiragana return true
+        $this->assertEquals($this->expected, $this->actual);
+    }
+
+    /**
+     * @author khoa.td
+     * Test input Alpha 1 byte to username
+     */
+    public function testInputAlpha1Byte(){
+        // Give the context
+        $this->expected = true;
+        // When inputed is Hiragana
+        $this->employee->setName("ヾd");
+        $this->actual = $this->employee->checkNameContainAlpha1Byte();
+        // Then function checkNameIsHiragana return true
+        $this->assertEquals($this->expected, $this->actual);
+    }
+
+    /**
+     * @author khoa.td
+     * Test input Prohibited Character to username
+     */
+    public function testInputProhibitedCharacter(){
+        // Give the context
+        $this->expected = true;
+        // When inputed is Hiragana
+        $this->employee->setName("ｸ");
+        $this->actual = $this->employee->checkNameContainProhibitedCharacter();
+        // Then function checkNameIsHiragana return true
+        $this->assertEquals($this->expected, $this->actual);
+    }
+
     /**
      * @author:Khanh
      * test functions for check valid input phone
      */
-    
     function testShouldReturnFalseWhenInputPhoneContainCharacterAlpha(){
         //Given
         $input = '090-999-454a';
@@ -200,18 +217,5 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
         // Then
         $this->assertTrue($result);
     }
-    /**
-     * @author khoa.td
-     * Test input Alpha 1 byte to username
-     */
-    public function testInputAlpha1Byte(){
-        // Give the context
-        $this->expected = true;
-        // When inputed is Hiragana
-        $this->employee->setName("ヾd");
-        $this->actual = $this->employee->checkNameContainAlpha1Byte();
-        // Then function checkNameIsHiragana return true
-        $this->assertEquals($this->expected, $this->actual);
-    }
-    
+
 }
