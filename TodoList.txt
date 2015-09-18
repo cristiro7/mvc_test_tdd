@@ -1,0 +1,68 @@
+To do list
+1. Test User Login
+ + Test User login by password is not encrypted
+ + Test User login by password is encrypted MD5
+ + Test User login by password is encrypted SHA-2
+ + Test user login by username and password is match
+ + Test user login by username is not match
+ + Test user login by password is not match
+ + Test user login by username and password is not match 
+ 
+2. Test calculate gross salary for each Employee type
+ a. Normal Employee
+  + Test case normal salary is zero
+  + Test case normal salary is greater than zero and is interger
+  + Test case normal salary is greater than zero and is float
+  
+ b. Hourly Employee
+  + Test case hours worked is zero
+  + Test case hours worked is less than 40
+  + Test case hours worked is equal 40
+  + Test case hours worked is greater than 40
+ c. Sale Employee
+  + Test case commission rate is zero
+  + Test case commission rate is equal 1
+  + Test case commission rate is greater than 0 and less than 1
+  
+3. Test calculate National Person rate from Gross salary
+ + Test case gross salary is less than 2000, national person rate will be 5%
+ + Test case gross salary is between 2000 and 6000, national person rate will be 6.5%
+ + Test case gross salary is between 6000 and 10000, national person rate will be 7.5%
+ + Test case gross salary is greater than 10000, national person rate will be 0%
+ 
+4. Test calculate Tax rate from Salary Before Tax 
+ + Test case Salary Before Tax is less than 5000, tax rate will be 5%
+ + Test case Salary Before Tax is between 5000 and 10000, tax rate will be 10%
+ + Test case Salary Before Tax is between 10000 and 20000, tax rate will be 15%
+ + Test case Salary Before Tax is greater than 20000, tax rate will be 0% 
+
+5. Test calculate salary before tax from Gross salary
+ + Test case gross salary is zero
+ + Test case gross salary is less than 2000
+ + Test case gross salary is between 2000 and 6000
+ + Test case gross salary is between 6000 and 10000
+ + Test case gross salary is greater than 10000
+ 
+6. Test calculate Net salary after tax from Salary Before Tax
+ + Test case Salary Before Tax is zero 
+ + Test case Salary Before Tax is less than 5000, tax rate will be 5%
+ + Test case Salary Before Tax is between 5000 and 10000, tax rate will be 10%
+ + Test case Salary Before Tax is between 10000 and 20000, tax rate will be 15%
+ + Test case Salary Before Tax is greater than 20000, tax rate will be 0% 
+ 
+7. Test insert weekly salary for each Employee type
+ a. Normal Employee
+  + Test case insert salary is success and match infomation
+  + Test case insert salary is success and not match infomation
+  + Test case insert salary is failure
+  
+ b. Hourly Employee
+  + Test case insert salary is success and match infomation
+  + Test case insert salary is success and not match infomation
+  + Test case insert salary is failure
+  
+ c. Sale Employee
+  + Test case insert salary is success and match infomation
+  + Test case insert salary is success and not match infomation
+  + Test case insert salary is failure
+ 
