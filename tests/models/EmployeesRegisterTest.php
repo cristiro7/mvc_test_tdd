@@ -75,6 +75,8 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
      * Test input Hiragana to username
      */
     public function testInputHiragana(){
-    	 
+    	 // Give the context
+    	 // When
+    	 // Then
     }
 }
