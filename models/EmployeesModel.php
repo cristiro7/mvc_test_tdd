@@ -15,6 +15,12 @@ class EmployeesModel extends \Model
     private $lastname;
     private $isaccountant;
     
+    // Extend tbl_user
+    private $name;
+    private $phone;
+    private $email;
+    private $address;
+    
     // Using tbl_weeklysalary
     private $user_id;
     private $comment;
