@@ -46,7 +46,14 @@ class EmployeesModel extends \Model
         // Get value user input
         $username = isset($postDatas['username']) ? trim($postDatas['username']) : NULL;
         $password = isset($postDatas['password']) ? trim($postDatas['password']) : NULL;
-        
+        $phone = isset($postDatas['phone']) ? trim($postDatas['phone']) : NULL;
+        //check phone length
+        if(!empty($phone)){
+            if(strlen($phone) > 12 || $this->checkPhoneInputFormat($phone) == false){
+                $result['result'] = false;
+                array_push($result['errors'], "Phone Number is Invalid!");
+            }
+        }
         // User not enter username
         if (empty($username))
         {
@@ -133,11 +140,13 @@ class EmployeesModel extends \Model
      */
     
     function checkPhoneInputFormat($phone){
-        //check phone length
-        if(strlen($phone) > 12)
-            return false;
+        
         // check phone format
-        return preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', trim($phone));
+        if(preg_match('/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/', trim($phone))){
+            return true;
+        }else{
+            return false;
+        }
     }
     
     /**

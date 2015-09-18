@@ -94,16 +94,6 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
         // Then the effect (assertion)
         $this->assertEquals($this->expected, $this->actual);
     }
-    
-    /**
-     * Test input Hiragana to username
-     */
-    public function testInputHiragana(){
-    	 // Give the context
-    	 // When
-    	 // Then
-    }
-    
     /**
      * @author:Khanh
      * Test Input Kanji Lv3 -- Should return false
@@ -145,4 +135,70 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
         // Then
         $this->assertFalse($rerult);
     }
+    
+    /**
+     * @author:Khanh
+     * test functions for check valid input phone
+     */
+    
+    function testShouldReturnFalseWhenInputPhoneContainCharacterAlpha(){
+        //Given
+        $input = '090-999-454a';
+        // When
+        $result = $this->employee->checkPhoneInputFormat($input);
+        // Then
+        $this->assertFalse($result);
+    }
+
+    function testShouldReturnFalseWhenInputPhoneHaveFirstCharacterIsHyPhen(){
+        //Given
+        $input = '-09-999-4542';
+        // When
+        $result = $this->employee->checkPhoneInputFormat($input);
+        // Then
+        $this->assertFalse($result);
+    }
+
+    function testShouldReturnFalseWhenInputPhoneIsIncorrectFormat(){
+        //Given
+        $arrInputs = array('090-9993-4544','0904-9993-454','090-999-45443');
+        foreach($arrInputs as $input){
+            // When
+            $result = $this->employee->checkPhoneInputFormat($input);
+            // Then
+            $this->assertFalse($result);
+        }
+    }
+    
+
+    function testShouldReturnFalseWhenInputPhoneContainSymbol(){
+        //Given
+        $input = '09#-999-4542';
+        // When
+        $result = $this->employee->checkPhoneInputFormat($input);
+        // Then
+        $this->assertFalse($result);
+    }
+    
+
+    function testShouldReturnFalseWhenInputPhoneContainPoint(){
+        //Given
+        $input = '09.-999-4542';
+        // When
+        $result = $this->employee->checkPhoneInputFormat($input);
+        // Then
+        $this->assertFalse($result);
+    }
+    
+    // test case OK
+
+    function testShouldReturnTrueWhenInputPhoneIsCorrectFormat(){
+        //Given
+        $input = '093-999-4542';
+        // When
+        $result = $this->employee->checkPhoneInputFormat($input);
+        // Then
+        $this->assertTrue($result);
+    }
+    
 }
