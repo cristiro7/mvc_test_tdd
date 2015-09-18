@@ -123,28 +123,54 @@ class EmployeesModel extends \Model
     }
 
     /**
-     * check name input is full width Katakana characters.
-     *
+     * Fields Validations
      * @return false if check is not match
      * @return true if check is match
      */
-    public function checkInputIsFullwidthKatakanaChars($name)
-    {
-        // Contains all full width katakana characters
-        $pattern = "/^([゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ]+)$/u";
-
-        if(preg_match($pattern, $name)){
+    public function checkNameIsHiragana(){
+        // Contains all Hiragana characters CODE
+        $pattern ='/^[\x{3040}-\x{309F}\s]+$/u';
+        if(preg_match($pattern, $this->name)){
             return true;
         }else{
             return false;
         }
     }
     
+    public function checkNameContainAlpha1Byte(){
+        // Contains all alpha 1 byte characters
+        $pattern ='/^.*[a-zA-Z0-9]+.*$/';
+        if(preg_match($pattern, $this->name)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function checkNameContainProhibitedCharacter(){
+        // Contains all Hiragana characters CODE
+        $pattern ='/^[\x{FF5F}-\x{FF9F}\s]+$/u';
+        if(preg_match($pattern, $this->name)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public function checkInputIsFullwidthKatakanaChars($name)
+    {
+        // Contains all full width katakana characters
+        $pattern = "/^([゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ]+)$/u";
+        if(preg_match($pattern, $name)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * function check phone input format
      * @return boolean
      */
-    
+
     function checkPhoneInputFormat($phone){
         
         // check phone format
@@ -154,7 +180,7 @@ class EmployeesModel extends \Model
             return false;
         }
     }
-    
+
     /**
      * Login process.
      * 
@@ -203,21 +229,17 @@ class EmployeesModel extends \Model
     {
         // Set query 
         $sql = "SELECT * FROM tbl_user ORDER BY id DESC";
-
         $this->setSql($sql);
         $employees = $this->getAll();
-
         if (empty($employees))
         {
             return false;
         }
-
         return $employees;
     }
 
     /**
      * Get detail infomation employee by id.
-     *
      * @return false if select empty
      * @return array if select exist
      */
@@ -225,21 +247,17 @@ class EmployeesModel extends \Model
     {
         // Set query
         $sql = "SELECT id, firstname, lastname FROM tbl_user WHERE id = ?";
-
         $this->setSql($sql);
         $employeeDetails = $this->getRow(array($id));
-
         if (empty($employeeDetails))
         {
             return false;
         }
-
         return $employeeDetails;
     }
 
     /**
      * Get detail infomation employee type by user_id.
-     *
      * @return false if select empty
      * @return array if select exist
      */
@@ -247,21 +265,17 @@ class EmployeesModel extends \Model
     {
         // Set query
         $sql = "SELECT et.id, et.name FROM tbl_user AS u LEFT JOIN tbl_employeetype AS et ON u.employeetype_id = et.id WHERE u.id = ?";
-
         $this->setSql($sql);
         $EmployeeType = $this->getRow(array($user_id));
-
         if (empty($EmployeeType))
         {
             return false;
         }
-
         return $EmployeeType;
     }
-    
+
     /**
      * Get detail infomation weekly salary by id.
-     *
      * @return false if select empty
      * @return array if select exist
      */
@@ -269,18 +283,15 @@ class EmployeesModel extends \Model
     {
         // Set query
         $sql = "SELECT user_id, basic_salary, worked_hour, gross_sale, commission_rate, gross_salary, net_salary, comment FROM tbl_weeklysalary WHERE id = ?";
-    
         $this->setSql($sql);
         $detailWeeklySalary = $this->getRow(array($id));
-    
         if (empty($detailWeeklySalary))
         {
             return false;
         }
-    
         return $detailWeeklySalary;
     }
-    
+
     /**
      * Calulate auto national person rate for user.
      * @param int $gross_salary
@@ -311,10 +322,9 @@ class EmployeesModel extends \Model
         {
             $pn_rate = 0;
         }
-         
         return $pn_rate;
     }
-    
+
     /**
      * Calulate auto salary before tax for user.
      * @param int $gross_salary
@@ -334,99 +344,63 @@ class EmployeesModel extends \Model
             // Calculate salary before tax
             $beforeTax_salary = (int)($gross_salary - $gross_salary * $pn_rate/100);
         } 
-	    return $beforeTax_salary;
-	}
-	
-	/**
-	 * Calulate auto tax rate for user.
-	 * @param int $beforeTax_salary
-	 * @return int
-	 */
-	public function calculateTaxRate($beforeTax_salary)
-	{
-	    // If salary before tax < 5000
-	    if ($beforeTax_salary < 5000)
-	    {
-	        // Tax rate will be 5%
-	        $tax_rate = 5;
-	    }
-	    //If salary before tax between 5000 and 10000
-	    elseif ($beforeTax_salary < 10000)
-	    {
-	        // Tax rate will be 10%
-	        $tax_rate = 10;
-	    }
-	    //If salary before tax between 10000 and 20000
-	    elseif ($beforeTax_salary < 20000)
-	    {
-	        // Tax rate will be 15%
-	        $tax_rate = 15;
-	    }
-	    // Else case above
-	    else
-	    {
-	        $tax_rate = 0;
-	    }
-	     
-	    return $tax_rate;
-	}
+        return $beforeTax_salary;
+    }
+
+    /**
+     * Calulate auto tax rate for user.
+     * @param int $beforeTax_salary
+     * @return int
+     */
+    public function calculateTaxRate($beforeTax_salary)
+    {
+        // If salary before tax < 5000
+        if ($beforeTax_salary < 5000)
+        {
+            // Tax rate will be 5%
+            $tax_rate = 5;
+        }
+        //If salary before tax between 5000 and 10000
+        elseif ($beforeTax_salary < 10000)
+        {
+            // Tax rate will be 10%
+            $tax_rate = 10;
+        }
+        //If salary before tax between 10000 and 20000
+        elseif ($beforeTax_salary < 20000)
+        {
+            // Tax rate will be 15%
+            $tax_rate = 15;
+        }
+        // Else case above
+        else
+        {
+            $tax_rate = 0;
+        }
+         
+        return $tax_rate;
+    }
     
     /**
      * Calulate auto net salary.
      * @param int $beforeTax_salary
-	 * @return int  
+     * @return int  
      */
     public function calculateNetSalary($beforeTax_salary)
-	{
-	    if($beforeTax_salary == 0)
-	    {
-	        $net_salary = 0;
-	    }
-	    else
-	    {
-    	    // Calulate auto national person by $gross_salary
-    	    $tax_rate = $this->calculateTaxRate($beforeTax_salary);
-    	    
+    {
+        if($beforeTax_salary == 0)
+        {
+            $net_salary = 0;
+        }
+        else
+        {
+            // Calulate auto national person by $gross_salary
+            $tax_rate = $this->calculateTaxRate($beforeTax_salary);
+            
             // Calculate net salary
-    	    $net_salary = (int) ($beforeTax_salary - $beforeTax_salary * $tax_rate/100);
-	    }
-	    return $net_salary;
-	}
-	
-	/*
-	 * Validation of Name
-	 * @author khoa.td
-	 */
-	public function checkNameIsHiragana(){
-	    // Contains all Hiragana characters CODE
-	    $pattern ='/^[\x{3040}-\x{309F}\s]+$/u';
-	    if(preg_match($pattern, $this->name)){
-	        return true;
-	    }else{
-	        return false;
-	    }
-	}
-	
-	
-	
-	
-	public function checkNameContainAlpha1Byte(){
-	    // Contains all alpha 1 byte characters
-	    $pattern ='/^.*[a-zA-Z0-9]+.*$/';
-	    if(preg_match($pattern, $this->name)){
-	        return true;
-	    }else{
-	        return false;
-	    }
-	}
-	public function checkNameContainProhibitedCharacter(){
-	    // Contains all Hiragana characters CODE
-	    $pattern ='/^[\x{FF5F}-\x{FF9F}\s]+$/u';
-	    if(preg_match($pattern, $this->name)){
-	        return true;
-	    }else{
-	        return false;
-	    }
-	}
-	
+            $net_salary = (int) ($beforeTax_salary - $beforeTax_salary * $tax_rate/100);
+        }
+        return $net_salary;
+    }
+
 }
