@@ -200,5 +200,18 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
         // Then
         $this->assertTrue($result);
     }
+    /**
+     * @author khoa.td
+     * Test input Alpha 1 byte to username
+     */
+    public function testInputAlpha1Byte(){
+        // Give the context
+        $this->expected = true;
+        // When inputed is Hiragana
+        $this->employee->setName("ヾd");
+        $this->actual = $this->employee->checkNameContainAlpha1Byte();
+        // Then function checkNameIsHiragana return true
+        $this->assertEquals($this->expected, $this->actual);
+    }
     
 }

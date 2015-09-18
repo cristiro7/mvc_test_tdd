@@ -404,4 +404,38 @@ class EmployeesModel extends \Model
 	public function setName($name){ $this->name = $name;}
 	public function getName(){return $this->name;}
 	
+	/**
+	 * @author khoa.td
+	 * Test input Prohibited Character to username
+	 */
+	public function testInputProhibitedCharacter(){
+	    // Give the context
+	    $this->expected = true;
+	    // When inputed is Hiragana
+	    $this->employee->setName("ｸ");
+	    $this->actual = $this->employee->checkNameContainProhibitedCharacter();
+	    // Then function checkNameIsHiragana return true
+	    $this->assertEquals($this->expected, $this->actual);
+	}
+	
+	
+	public function checkNameContainAlpha1Byte(){
+	    // Contains all alpha 1 byte characters
+	    $pattern ='/^.*[a-zA-Z0-9]+.*$/';
+	    if(preg_match($pattern, $this->name)){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+	public function checkNameContainProhibitedCharacter(){
+	    // Contains all Hiragana characters CODE
+	    $pattern ='/^[\x{FF5F}-\x{FF9F}\s]+$/u';
+	    if(preg_match($pattern, $this->name)){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+	
 }
