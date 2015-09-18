@@ -15,6 +15,37 @@ class EmployeesController extends \Controller
         // show the view
         return $this->view->output();
     }
+    
+    /**
+     * The register action, when you do employees/register
+     * If register is false , output errors
+     */
+    function register(){
+        if(!empty($_POST['registerFormSubmit'])){ // User submit register form
+            $valid = EmployeesModel::checkValid($_POST);
+            if($valid['result']){
+                $employee = new EmployeesModel();
+                $employee->setData($_POST);
+                
+                $result = $employee->register();
+                if($result['result'] == true){
+                    header('location: ' . BASE_PATH . 'employees/login');
+                }else{
+                    $this->setView('index');
+                    $this->view->set('title', 'There was an error login the data!');
+                    $this->view->set('formData', $_POST);
+                    $this->view->set('saveError', $result['result_details']);
+                }
+            }else{
+                $this->setView('index');
+                $this->view->set('title', 'Invalid form data!');
+                $this->view->set('errors', $valid['errors']);
+                $this->view->set('formData', $_POST);
+            }
+            
+            return $this->view->output();
+        }
+    }
 
     /**
      * The login action, when you do employees/login

@@ -28,6 +28,27 @@ class EmployeesModel extends \Model
     private $net_salary;
     
     /**
+     * feature Register
+     * List functions:
+     * - checkValid(); return boolean value
+     * - setData(); set data submit 
+     * - register(); process register
+     */
+    
+    public static function checkValid($postDatas){
+        
+        return true;
+    }
+    
+    function setData($postDatas){
+        return true;
+    }
+    
+    function register(){
+        return true;
+    }
+    
+    /**
      * check name input is full width Katakana characters.
      *
      * @return false if check is not match
