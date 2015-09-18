@@ -83,4 +83,41 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
      * @author:Khanh
      * Test Input Kanji Lv3 -- Should return false
      */
+    
+    function testShouldReturnFalseWhenInputKanjiLv3(){
+        // Given
+        $input = '篗';
+        // When
+        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
+        // Then
+        $this->assertFalse($rerult);
+    }
+    
+    /**
+     * @author:Khanh
+     * Test Input Kanji Lv4 -- Should return false
+     */
+    
+    function testShouldReturnFalseWhenInputKanjiLv4(){
+        // Given
+        $input = '㥯';
+        // When
+        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
+        // Then
+        $this->assertFalse($rerult);
+    }
+    
+    /**
+     * @author:Khanh
+     * Test Input String contain Kanji -- Should return false
+     */
+    
+    function testShouldReturnFalseWhenInputStringContainKanji(){
+        // Given
+        $input = 'ウ已';
+        // When
+        $rerult = $this->employee->checkInputIsFullwidthKatakanaChars($input);
+        // Then
+        $this->assertFalse($rerult);
+    }
 }
