@@ -55,6 +55,20 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * @author khoa.td
+     * Test input Hiragana to username
+     */
+    public function testInputHiragana(){
+        // Give the context
+        $this->expected = true;
+        // When inputed is Hiragana
+        $this->employee->setName("ゞほ");
+        $this->actual = $this->employee->checkNameIsHiragana();
+        // Then function checkNameIsHiragana return true
+        $this->assertEquals($this->expected, $this->actual);
+    }
+    
+    /**
      * Test User register by name input is FullwidthKatakana characters
      */
     public function testsfEmployeesRegister_NameInputIsFullwidthKatakanaChars()

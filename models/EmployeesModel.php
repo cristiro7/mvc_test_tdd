@@ -364,6 +364,22 @@ class EmployeesModel extends \Model
 	    }
 	    return $net_salary;
 	}
-
+	
+	/*
+	 * Validation of Name
+	 * @author khoa.td
+	 */
+	public function checkNameIsHiragana(){
+	    // Contains all Hiragana characters CODE
+	    $pattern ='/^[\x{3040}-\x{309F}\s]+$/u';
+	    if(preg_match($pattern, $this->name)){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+	
+	public function setName($name){ $this->name = $name;}
+	public function getName(){return $this->name;}
 	
 }
