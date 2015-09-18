@@ -79,4 +79,9 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     	 // When
     	 // Then
     }
+    
+    /**
+     * @author:Khanh
+     * Test Input Kanji Lv3 -- Should return false
+     */
 }
