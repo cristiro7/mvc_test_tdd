@@ -29,7 +29,12 @@ require_once($HOME . "/models/EmployeesModel.php");
  * 
  * 5/ Kanji Lv4
  * 
- * 6/ Contain Kanji.asdasd
+ * 6/ Contain Kanji
+ * 
+ * * Test cases for khoa.td
+ * 7) Input contain hiragana
+ * 8) Input contain Alpha 1 byte
+ * 9) Contain Prohibited Character
  * 
  */
 
@@ -64,5 +69,12 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
     
         // Then the effect (assertion)
         $this->assertEquals($this->expected, $this->actual);
+    }
+    
+    /**
+     * Test input Hiragana to username
+     */
+    public function testInputHiragana(){
+    	 
     }
 }

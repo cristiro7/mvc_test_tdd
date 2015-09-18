@@ -258,4 +258,6 @@ class EmployeesModel extends \Model
 	    }
 	    return $net_salary;
 	}
+
+	
 }
