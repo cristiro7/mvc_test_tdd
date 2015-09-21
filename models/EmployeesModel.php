@@ -90,36 +90,31 @@ class EmployeesModel extends \Model
     }
 
     function register(){
+        $result = array();
         try
         {
             // Password encrypt by SHA-2
             $password = hash('SHA256',$this->password);
             // Call login() method in the EmployeesModel, put the result in $employee (false or user data)
-            $result = $employee->login($username,$password);
-        
+            $params = $this->buildParamsForCreateUser();
+            $result['result'] = $this->createUser();
             // Check result returned
-            if($result)
+            if($result['result'])
             {
-                // Login success, write the user data into session
-                Session::init();
-                Session::set('user_logged_in', true);
-                Session::set('user_id', $result['id']);
-                Session::set('firstname', $result['firstname']);
-                Session::set('lastname', $result['lastname']);
-                Session::set('fullname', $result['firstname']." ".$result['lastname']);
-                Session::set('employeetype_id', $result['employeetype_id']);
-        
-                // Redirect user to page list all Employees
-                header('location: ' . BASE_PATH . 'employees/listemployees');
             }
         }
         catch (Exception $e)
         {
-            $this->setView('login');
-            $this->view->set('title', 'There was an error login the data!');
-            $this->view->set('formData', $_POST);
-            $this->view->set('saveError', $e->getMessage());
+            $result['result_details'] = $e->getMessage();
         }
+    }
+    
+    function buildParamsForCreateUser(){
+        return $params;
+    }
+    
+    function createUser($params){
+        
     }
 
     /**
