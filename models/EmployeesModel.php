@@ -33,6 +33,9 @@ class EmployeesModel extends \Model
      */
     public function setName($name){ $this->name = $name;}
     public function getName(){return $this->name;}
+    public function getPhone(){return $this->phone;}
+    public function getEmail(){return $this->email;}
+    public function getAddress(){return $this->address;}
 
     /**
      * feature Register
@@ -41,7 +44,7 @@ class EmployeesModel extends \Model
      * - setData(); set data submit 
      * - register(); process register
      */
-    public static function checkValid($postDatas){
+    public function checkValid(){
         // Array save errors when validate.
         $result = array(
             'result' => true,
@@ -49,11 +52,8 @@ class EmployeesModel extends \Model
         );
         $check = true;
         
-        // Get value user input
-        $username = isset($postDatas['username']) ? trim($postDatas['username']) : NULL;
-        $password = isset($postDatas['password']) ? trim($postDatas['password']) : NULL;
-        $phone = isset($postDatas['phone']) ? trim($postDatas['phone']) : NULL;
         //check phone length
+        $phone = $this->getPhone();
         if(!empty($phone)){
             if(strlen($phone) > 12 || $this->checkPhoneInputFormat($phone) == false){
                 $result['result'] = false;
@@ -61,20 +61,14 @@ class EmployeesModel extends \Model
             }
         }
         // User not enter username
-        if (empty($username))
+        $name = $this->getName();
+        if (empty($name))
         {
             $result['result'] = false;
-            array_push($result['errors'], "Users name is required!");
+            array_push($result['errors'], "Name is required!");
         }else{
-            $result['result'] = $this->checkInputIsFullwidthKatakanaChars($username);
-            array_push($result['errors'], "User name input must be Fullwidth Katakana");
-        }
-        
-        // User not enter password
-        if (empty($password))
-        {
-            $result['result'] = false;
-            array_push($result['errors'], "Password is required!");
+            $result['result'] = $this->checkInputIsFullwidthKatakanaChars($name);
+            array_push($result['errors'], "Name input must be Fullwidth Katakana");
         }
         
         return $result;
@@ -82,39 +76,39 @@ class EmployeesModel extends \Model
 
     function setData($postDatas){
         foreach($postDatas as $field => $value){
-            if(isset($this->$field)){
-                $this->$field = $value;
-            }
+            $this->$field = $value;
         }
         return true;
     }
 
     function register(){
-        $result = array();
+        $result = array(
+            'result' => "",
+            'result_details' => ""
+        );
         try
         {
-            // Password encrypt by SHA-2
-            $password = hash('SHA256',$this->password);
             // Call login() method in the EmployeesModel, put the result in $employee (false or user data)
-            $params = $this->buildParamsForCreateUser();
             $result['result'] = $this->createUser();
-            // Check result returned
-            if($result['result'])
-            {
-            }
         }
         catch (Exception $e)
         {
             $result['result_details'] = $e->getMessage();
         }
+        /*
+        $result = array(
+            'result' => true,
+            'result_details' => ""
+        );
+        */
+        return $result;
     }
     
-    function buildParamsForCreateUser(){
-        return $params;
-    }
-    
-    function createUser($params){
-        
+    function createUser(){
+        // Set query
+        $sql = "INSERT INTO tbl_user(name,phone,email,address) VALUES(?,?,?,?)";
+        $this->setSql($sql);
+        return $this->execute(array($this->getName(),$this->getPhone(),$this->getEmail(),$this->getAddress()));
     }
 
     /**
@@ -122,50 +116,19 @@ class EmployeesModel extends \Model
      * @return false if check is not match
      * @return true if check is match
      */
-    public function checkNameIsHiragana(){
-        // Contains all Hiragana characters CODE
-        $pattern ='/^[\x{3040}-\x{309F}\s]+$/u';
-        if(preg_match($pattern, $this->name)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
-    public function checkNameContainAlpha1Byte(){
-        // Contains all alpha 1 byte characters
-        $pattern ='/^.*[a-zA-Z0-9]+.*$/';
-        if(preg_match($pattern, $this->name)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public function checkNameContainProhibitedCharacter(){
-        // Contains all Hiragana characters CODE
-        $pattern ='/^[\x{FF5F}-\x{FF9F}\s]+$/u';
-        if(preg_match($pattern, $this->name)){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    /**
+     * Check field Name
+     * @return boolean
+     */ 
     public function checkInputIsFullwidthKatakanaChars($name)
     {
-        // Contains all full width katakana characters
-        $pattern = "/^([゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ]+)$/u";
-        if(preg_match($pattern, $name)){
-            return true;
-        }else{
-            return false;
-        }
+        return Pattern::isFullwidthKatakana($name);
     }
 
     /**
      * function check phone input format
      * @return boolean
      */
-
     function checkPhoneInputFormat($phone){
         
         // check phone format

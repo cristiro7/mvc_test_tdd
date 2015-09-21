@@ -3,6 +3,7 @@
 $HOME = realpath(dirname(__FILE__)) . "/../..";
 require_once($HOME . "/config/config.php");
 require_once($HOME . "/library/Database.php");
+require_once($HOME . "/library/Pattern.php");
 require_once($HOME . "/library/Model.php");
 require_once($HOME . "/models/EmployeesModel.php");
 
@@ -118,10 +119,10 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
      */
     public function testInputHiragana(){
         // Give the context
-        $this->expected = true;
+        $this->expected = false;
         // When inputed is Hiragana
         $this->employee->setName("ゞほ");
-        $this->actual = $this->employee->checkNameIsHiragana();
+        $this->actual = $this->employee->checkInputIsFullwidthKatakanaChars($this->employee->getName());
         // Then function checkNameIsHiragana return true
         $this->assertEquals($this->expected, $this->actual);
     }
@@ -132,10 +133,10 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
      */
     public function testInputAlpha1Byte(){
         // Give the context
-        $this->expected = true;
+        $this->expected = false;
         // When inputed is Hiragana
         $this->employee->setName("ヾd");
-        $this->actual = $this->employee->checkNameContainAlpha1Byte();
+        $this->actual = $this->employee->checkInputIsFullwidthKatakanaChars($this->employee->getName());
         // Then function checkNameIsHiragana return true
         $this->assertEquals($this->expected, $this->actual);
     }
@@ -146,10 +147,10 @@ class EmployeesRegisterTest extends PHPUnit_Framework_TestCase
      */
     public function testInputProhibitedCharacter(){
         // Give the context
-        $this->expected = true;
+        $this->expected = false;
         // When inputed is Hiragana
         $this->employee->setName("ｸ");
-        $this->actual = $this->employee->checkNameContainProhibitedCharacter();
+        $this->actual = $this->employee->checkInputIsFullwidthKatakanaChars($this->employee->getName());
         // Then function checkNameIsHiragana return true
         $this->assertEquals($this->expected, $this->actual);
     }
