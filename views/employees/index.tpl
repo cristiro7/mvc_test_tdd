@@ -1,23 +1,24 @@
 <div class="content">
     <h1>Register to Web App</h1>
-    <div class="errors">
-        <?php 
-        if (isset($errors)) 
-                {
-                    echo '<ul>';
-                    foreach ($errors as $e)
-                    {
-                        echo '<li>' . $e . '</li>';
-                    }
-                    echo '</ul>';
-                } 
-                if (isset($saveError))
-                {
-                    echo "<h2>Error register. Please try again.</h2>" . $saveError;
-                }
-                ?>
-    </div><!--  .errors -->
-
+    
+    <?php 
+    if (isset($errors)) 
+    {
+        echo '<div class="errors">';
+        echo '<ul>';
+        foreach ($errors as $e)
+        {
+            echo '<li>' . $e . '</li>';
+        }
+        echo '</ul>';
+        echo '</div><!--  .errors -->';
+    } 
+    if (isset($saveError))
+    {
+        echo "<h2>Error register. Please try again.</h2>" . $saveError;
+    }
+    ?>
+    
     <div class="register">
         <form action="<?php echo BASE_PATH; ?>employees/register" method="post">
             <p>

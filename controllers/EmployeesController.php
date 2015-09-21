@@ -8,10 +8,16 @@ class EmployeesController extends \Controller
     /**
      * Index, default action (shows the login form), when you do employees/index or index
      */
-    public function index()
+    function index()
     {
         $this->view->set('title', 'Register Form');
 
+        // show the view
+        return $this->view->output();
+    }
+    
+    function register_confirm(){
+        $this->view->set('title', 'Registration confirmation');
         // show the view
         return $this->view->output();
     }
@@ -22,14 +28,13 @@ class EmployeesController extends \Controller
      */
     function register(){
         if(!empty($_POST['registerFormSubmit'])){ // User submit register form
-            $valid = EmployeesModel::checkValid($_POST);
+            $employee = new EmployeesModel();
+            $employee->setData($_POST);
+            $valid = $employee->checkValid();
             if($valid['result']){
-                $employee = new EmployeesModel();
-                $employee->setData($_POST);
-                
                 $result = $employee->register();
-                if($result['result'] == true){
-                    header('location: ' . BASE_PATH . 'employees/login');
+                if($result['result']){
+                    header('Location: ' . BASE_PATH . 'employees/register_confirm');
                 }else{
                     $this->setView('index');
                     $this->view->set('title', 'There was an error login the data!');
@@ -42,9 +47,11 @@ class EmployeesController extends \Controller
                 $this->view->set('errors', $valid['errors']);
                 $this->view->set('formData', $_POST);
             }
+        return $this->view->output();
+        } else {
             
-            return $this->view->output();
         }
+        
     }
 
     /**
@@ -53,7 +60,7 @@ class EmployeesController extends \Controller
      * Else create Session to save info user login
      * And call function getListEmployees
      */
-    public function login()
+    function login()
     {
         // If user not press button submit login form , so return page Login Form
         if (!isset($_POST['loginFormSubmit']))
@@ -149,7 +156,7 @@ class EmployeesController extends \Controller
     /**
      * Get list all employees (users)
      */
-    public function listemployees()
+    function listemployees()
     {
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
@@ -167,8 +174,7 @@ class EmployeesController extends \Controller
     /**
      * Get detail infomation employee by user_id
      */
-    public function salary($user_id)
-    {
+    function salary($user_id){
         // Auth::handleLogin() makes sure that only logged in users can use this action/method and see that page
         Auth::handleLogin();
         
