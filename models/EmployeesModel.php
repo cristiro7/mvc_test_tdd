@@ -54,7 +54,11 @@ class EmployeesModel extends \Model
         
         //check phone length
         $phone = $this->getPhone();
-        if(!empty($phone)){
+        if (empty($phone))
+        {
+            $result['result'] = false;
+            array_push($result['errors'], "Phone is required!");
+        } else{
             if(strlen($phone) > 12 || $this->checkPhoneInputFormat($phone) == false){
                 $result['result'] = false;
                 array_push($result['errors'], "Phone Number is Invalid!");
